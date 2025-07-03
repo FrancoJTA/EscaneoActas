@@ -1,4 +1,4 @@
-package com.example.escaneoactas
+package com.example.escaneoactas.utils.Train
 
 data class Recognition(
     val label: Int,        // Dígito reconocido (0-9)

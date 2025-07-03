@@ -1,4 +1,4 @@
-package com.example.escaneoactas
+package com.example.escaneoactas.utils.Train
 
 enum class Device {
     CPU,

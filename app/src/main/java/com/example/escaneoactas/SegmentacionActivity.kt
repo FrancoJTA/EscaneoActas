@@ -8,10 +8,10 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.escaneoactas.utils.Train.DigitClassifier
 import org.opencv.android.OpenCVLoader
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
-import java.io.InputStream
 
 class SegmentacionActivity : AppCompatActivity() {
 
@@ -21,7 +21,7 @@ class SegmentacionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_segmentacion)
         segmentedImageView = findViewById(R.id.segmentedImage)
 
-        // Inicializar OpenCV
+
         if (!OpenCVLoader.initDebug()) {
             Log.e("OpenCV", "OpenCV no se pudo inicializar")
             finish()
@@ -51,14 +51,26 @@ class SegmentacionActivity : AppCompatActivity() {
         val mat = Mat()
         val processed = Mat()
 
+        // Convertir a escala de grises
         org.opencv.android.Utils.bitmapToMat(bitmap, mat)
         Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGBA2GRAY)
-        Imgproc.GaussianBlur(mat, mat, Size(3.0, 3.0), 0.0)
-        Imgproc.threshold(mat, processed, 150.0, 255.0, Imgproc.THRESH_BINARY_INV)
 
-        val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(2.0, 2.0))
-        val kernel1 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(50.0, 50.0))
-        Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_OPEN, kernel)
+        // Aplicar desenfoque gaussiano para reducir ruido
+        // Tamaño del kernel (5.0, 5.0) mejora suavizado pero puede afectar bordes pequeños
+        Imgproc.GaussianBlur(mat, mat, Size(47.0, 47.0), 0.0)
+
+        // Umbralización adaptativa mejora segmentación bajo distintas iluminaciones
+        Imgproc.adaptiveThreshold(
+            mat, processed, 255.0,
+            Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
+            Imgproc.THRESH_BINARY_INV,
+            29,  // tamaño de bloque: aumentar si hay mucho ruido
+            2.0  // constante que se resta: subir si hay muchos falsos positivos
+        )
+
+        // Morfología: cerrar huecos y mejorar forma de los números
+        val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(17.0, 17.0))
+        Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_CLOSE, kernel)
 
         val contours = mutableListOf<MatOfPoint>()
         val hierarchy = Mat()
@@ -73,38 +85,36 @@ class SegmentacionActivity : AppCompatActivity() {
 
         for (cnt in contours) {
             val rect = Imgproc.boundingRect(cnt)
-            if (rect.area() > 100 && rect.width > 10 && rect.height > 10) {
+
+            // Filtrado por tamaño: descarta ruido (ajusta según tamaño promedio del número)
+            if (rect.area() > 5000 && rect.width > 30 && rect.height > 30) {
                 val roi = Mat(processed, rect)
                 val rawBitmap = Bitmap.createBitmap(roi.cols(), roi.rows(), Bitmap.Config.ARGB_8888)
                 org.opencv.android.Utils.matToBitmap(roi, rawBitmap)
 
-                // Centrar en fondo negro cuadrado
-                val originalWidth = roi.cols()
-                val originalHeight = roi.rows()
-                val maxDim = maxOf(originalWidth, originalHeight)
-                val paddingRatio = 0.7f // 40% de padding extra
-
+                // Fondo negro cuadrado con padding
+                val maxDim = maxOf(roi.cols(), roi.rows())
+                val paddingRatio = 0.7f // Mayor valor = más espacio negro alrededor
                 val paddedSize = (maxDim * (1.0f + paddingRatio)).toInt()
                 val paddedBitmap = Bitmap.createBitmap(paddedSize, paddedSize, Bitmap.Config.ARGB_8888)
-
                 val canvas = android.graphics.Canvas(paddedBitmap)
                 canvas.drawColor(android.graphics.Color.BLACK)
-
-                val left = (paddedSize - originalWidth) / 2
-                val top = (paddedSize - originalHeight) / 2
+                val left = (paddedSize - roi.cols()) / 2
+                val top = (paddedSize - roi.rows()) / 2
                 canvas.drawBitmap(rawBitmap, left.toFloat(), top.toFloat(), null)
 
-                // Exaltación de trazos: dilatación antes de reducir
+                // Dilatar para engrosar trazos
                 val thickenedMat = Mat()
+                val kernel1 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(30.0, 40.0)) // Más grande = trazos más gruesos
                 org.opencv.android.Utils.bitmapToMat(paddedBitmap, thickenedMat)
                 Imgproc.dilate(thickenedMat, thickenedMat, kernel1)
 
-                // Convertir a Bitmap para escalar
+                // Convertir y escalar a 28x28 para clasificación
                 val thickenedBitmap = Bitmap.createBitmap(thickenedMat.cols(), thickenedMat.rows(), Bitmap.Config.ARGB_8888)
                 org.opencv.android.Utils.matToBitmap(thickenedMat, thickenedBitmap)
-
-                // Escalar a 28x28
                 val resized = Bitmap.createScaledBitmap(thickenedBitmap, 28, 28, true)
+
+                // Solo vista previa para UI (no se usa en clasificación)
                 val previewBitmap = Bitmap.createBitmap(28, 28, Bitmap.Config.ARGB_8888)
                 for (y in 0 until 28) {
                     for (x in 0 until 28) {
@@ -118,23 +128,11 @@ class SegmentacionActivity : AppCompatActivity() {
                         previewBitmap.setPixel(x, y, grayPixel)
                     }
                 }
-                // Re-binarización para limpieza final
-//                val binarized = resized.copy(Bitmap.Config.ARGB_8888, true)
-//                for (y in 0 until 28) {
-//                    for (x in 0 until 28) {
-//                        val pixel = binarized.getPixel(x, y)
-//                        val r = (pixel shr 16) and 0xFF
-//                        val newColor = if (r > 120) 0xFFFFFFFF.toInt() else 0xFF000000.toInt()
-//                        binarized.setPixel(x, y, newColor)
-//                    }
-//                }
 
-                // Clasificar
                 val recognition = classifier.classify(resized)
                 Log.d("DigitClassifier", "Dígito: ${recognition.label}, Conf: ${"%.2f".format(recognition.confidence)}")
 
                 if (recognition.label != -1 && recognition.confidence > 0.5f) {
-                    // Mostrar ROI en UI
                     runOnUiThread {
                         val imageView = ImageView(this)
                         imageView.setImageBitmap(previewBitmap)
@@ -144,7 +142,6 @@ class SegmentacionActivity : AppCompatActivity() {
                         containerLayout.addView(imageView)
                     }
 
-                    // Dibujar en imagen completa
                     Imgproc.rectangle(
                         result,
                         Point(rect.x.toDouble(), rect.y.toDouble()),
@@ -176,6 +173,7 @@ class SegmentacionActivity : AppCompatActivity() {
         result.release()
         return resultBitmap
     }
+
 
 
 

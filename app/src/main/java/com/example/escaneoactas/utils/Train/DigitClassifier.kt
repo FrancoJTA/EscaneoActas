@@ -1,4 +1,4 @@
-package com.example.escaneoactas
+package com.example.escaneoactas.utils.Train
 
 import android.content.Context
 import android.graphics.Bitmap
