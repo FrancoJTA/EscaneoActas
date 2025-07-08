@@ -1,0 +1,17 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Anillo exterior (más oscuro) -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#88002E62"/>      <!-- azul 53 % -->
+            <size android:width="70dp" android:height="70dp"/>
+        </shape>
+    </item>
+
+    <!-- Disco interior encogido -->
+    <item android:top="12dp" android:bottom="12dp" android:left="12dp" android:right="12dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF"/>
+        </shape>
+    </item>
+</layer-list>

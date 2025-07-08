@@ -1,73 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Selector de parámetros -->
-    <com.example.escaneoactas.ParamSelectorView
-        android:id="@+id/paramSelector"
+    <!-- Vista previa en vivo -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
-    <!-- Controles de contornos -->
-    <LinearLayout
+    <!-- Máscara procesada -->
+    <ImageView
+        android:id="@+id/imageOverlay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:gravity="center_vertical">
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
-        <Button
-            android:id="@+id/btnToggleContours"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contornos: ON" />
+    <!-- Toggle linterna -->
+    <ImageButton
+        android:id="@+id/flashButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_flash_selector"
+        android:src="@drawable/ic_flash_off"
+        android:contentDescription="@string/cd_flash"
+        app:tint="@color/colorOnPrimary" />
 
-        <SeekBar
-            android:id="@+id/seekMinArea"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:max="50000"
-            android:progress="1000" />
+    <!-- Toggle máscara -->
+    <ImageButton
+        android:id="@+id/maskButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_circle_primary"
+        android:src="@drawable/ic_mask_on"
+        android:contentDescription="@string/cd_mask"
+        app:tint="@color/tint_mask_selector" />
 
-        <SeekBar
-            android:id="@+id/seekMaxArea"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:max="200000"
-            android:progress="200000" />
-    </LinearLayout>
 
-    <!-- Vista de cámara y botón de captura -->
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+    <!-- Botón captura -->
+    <ImageButton
+        android:id="@+id/captureButton"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/bg_capture_ripple"
+        android:contentDescription="@string/cd_capture"
+        android:scaleType="center"
+        app:tint="@null" />
 
-        <ImageView
-            android:id="@+id/imageOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY" />
 
-        <com.example.escaneoactas.OverlayView
-            android:id="@+id/overlayRects"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent" />
-
-        <Button
-            android:id="@+id/captureButton"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="32dp"
-            android:background="@drawable/capture_button_bg"
-            android:contentDescription="Capturar"
-            android:alpha="0.7" />
-    </FrameLayout>
-</LinearLayout>
+</FrameLayout>

@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- ON -->
+    <item android:drawable="@drawable/bg_circle_secondary" android:state_selected="true" />
+    <!-- OFF -->
+    <item android:drawable="@drawable/bg_circle_primary" />
+</selector>

@@ -105,7 +105,7 @@ class SegmentacionActivity : AppCompatActivity() {
 
                 // Dilatar para engrosar trazos
                 val thickenedMat = Mat()
-                val kernel1 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(30.0, 40.0)) // Más grande = trazos más gruesos
+                val kernel1 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(10.0, 10.0)) // Más grande = trazos más gruesos
                 org.opencv.android.Utils.bitmapToMat(paddedBitmap, thickenedMat)
                 Imgproc.dilate(thickenedMat, thickenedMat, kernel1)
 

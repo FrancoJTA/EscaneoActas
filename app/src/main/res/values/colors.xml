@@ -2,4 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="colorPrimary">#002E62</color>          <!-- azul principal -->
+    <color name="colorPrimaryVariant">#001B3C</color>   <!-- azul más oscuro -->
+    <color name="colorSecondary">#FFC900</color>        <!-- amarillo acento -->
+    <color name="colorSecondaryVariant">#C99E00</color> <!-- amarillo oscuro -->
+    <color name="colorBackground">#F9FAFB</color>       <!-- fondo casi blanco -->
+    <color name="colorSurface">#FFFFFF</color>          <!-- tarjetas / diálogos -->
+    <color name="colorOnPrimary">#FFFFFF</color>        <!-- texto sobre azul -->
+    <color name="colorOnSecondary">#002E62</color>      <!-- texto sobre amarillo -->
+    <color name="colorOnBackground">#121212</color>     <!-- texto principal -->
+    <color name="colorOnSurface">#262626</color>        <!-- texto en superficie -->
 </resources>

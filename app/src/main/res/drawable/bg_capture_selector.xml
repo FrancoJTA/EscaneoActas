@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- PRESSED -->
+    <item android:drawable="@drawable/bg_capture_pressed" android:state_pressed="true"/>
+    <!-- DEFAULT -->
+    <item android:drawable="@drawable/bg_capture_idle"/>
+</selector>

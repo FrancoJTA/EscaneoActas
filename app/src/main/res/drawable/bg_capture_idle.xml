@@ -1,0 +1,17 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Anillo exterior -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#55002E62"/>      <!-- azul 33 % -->
+            <size android:width="70dp" android:height="70dp"/>
+        </shape>
+    </item>
+
+    <!-- Disco interior -->
+    <item android:top="6dp" android:bottom="6dp" android:left="6dp" android:right="6dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF"/>
+        </shape>
+    </item>
+</layer-list>
