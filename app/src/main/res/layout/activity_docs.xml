@@ -1,10 +1,876 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DocsActivity">
+    android:background="@color/background">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- ========== HEADER ========== -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvMesaTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mesa XX"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tvRecinto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recinto"
+                    android:textSize="16sp"
+                    android:textColor="@color/light_gray"
+                    android:layout_marginTop="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edición Manual de Votos"
+                    android:textSize="14sp"
+                    android:textColor="@color/light_gray"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ========== VOTOS PRESIDENCIALES ========== -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+    android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🗳️ Votos Presidenciales"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Alianza Popular -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Alianza Popular"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etAlianzaPopular"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- ADN -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ADN"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etAdn"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- APB -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="APB"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etApb"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- NGP -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="NGP"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etNgp"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- LIBRE -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="LIBRE"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etLibre"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- Fuerza del Pueblo -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fuerza del Pueblo"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etLaFuerzaDelPueblo"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- MAS -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="MAS"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etMas"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- MORENA -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="MORENA"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etMorena"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- UNIDAD -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+                        android:text="UNIDAD"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+        <EditText
+                        android:id="@+id/etUnidad"
+            android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- PDC -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+            android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PDC"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etPdc"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+            android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+    </LinearLayout>
+
+                <!-- Nulos y Blancos -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"
+                    android:layout_marginVertical="8dp"/>
+
+                <!-- NULO -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="NULO"
+                        android:textSize="16sp"
+                        android:textColor="@color/warning"/>
+
+                    <EditText
+                        android:id="@+id/etNulo"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- BLANCO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+                        android:text="BLANCO"
+                        android:textSize="16sp"
+                        android:textColor="@color/warning"/>
+
+        <EditText
+                        android:id="@+id/etBlanco"
+            android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ========== VOTOS DIPUTADOS ========== -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="👥 Votos Diputados"
+            android:textSize="18sp"
+                    android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Alianza Popular Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Alianza Popular (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etAlianzaPopularDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- ADN Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ADN (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etAdnDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- APB Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="APB (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etApbDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- NGP Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="NGP (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etNgpDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- LIBRE Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="LIBRE (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etLibreDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- Fuerza del Pueblo Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fuerza del Pueblo (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etLaFuerzaDelPuebloDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- MAS Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="MAS (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etMasDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- MORENA Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="MORENA (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etMorenaDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- UNIDAD Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="UNIDAD (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etUnidadDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- PDC Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PDC (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/colorOnSurface"/>
+
+                    <EditText
+                        android:id="@+id/etPdcDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+                <!-- Nulos y Blancos Diputados -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"
+                    android:layout_marginVertical="8dp"/>
+
+                <!-- NULO Diputado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="NULO (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/warning"/>
+
+                    <EditText
+                        android:id="@+id/etNuloDiputado"
+                        android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+    </LinearLayout>
+
+                <!-- BLANCO Diputado -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+                        android:text="BLANCO (Dip.)"
+                        android:textSize="16sp"
+                        android:textColor="@color/warning"/>
+
+        <EditText
+                        android:id="@+id/etBlancoDiputado"
+            android:layout_width="120dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:hint="0"
+                        android:background="@drawable/bg_edittext_selector"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ========== ESTADOS ========== -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚙️ Estados"
+            android:textSize="18sp"
+                    android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cbVerificado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Verificado"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:layout_marginBottom="8dp"/>
+
+                <CheckBox
+                    android:id="@+id/cbObservado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Observado"
+                    android:textSize="16sp"
+                    android:textColor="#000000"/>
+
+    </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ========== BOTONES ========== -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/btnCancelar"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="Cancelar"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Guardar Votos"
+                android:textSize="16sp"
+                android:backgroundTint="@color/colorPrimary"/>
+
+</LinearLayout>
+
+        <!-- Progress bar para guardar -->
+        <ProgressBar
+            android:id="@+id/progressGuardar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+</ScrollView>

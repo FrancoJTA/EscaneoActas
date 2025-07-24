@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Imagen con bounding-boxes -->
     <ImageView
         android:id="@+id/segmentedImage"
         android:layout_width="0dp"
@@ -14,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Carrusel de miniaturas -->
     <HorizontalScrollView
         android:id="@+id/roiScrollView"
         android:layout_width="0dp"
@@ -21,7 +24,7 @@
         android:background="#111"
         android:fillViewport="true"
         android:scrollbars="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/segmentedImage"
+        app:layout_constraintTop_toBottomOf="@id/segmentedImage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -35,4 +38,29 @@
             android:padding="8dp" />
     </HorizontalScrollView>
 
+    <!-- Botón volver -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_arrow_back"
+        android:background="@drawable/bg_circle_primary"
+        android:contentDescription="@string/cd_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/colorOnPrimary" />
+
+    <!-- Botón docs -->
+    <ImageButton
+        android:id="@+id/btnDocs"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_docs"
+        android:background="@drawable/bg_circle_secondary"
+        android:contentDescription="@string/cd_docs"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/colorOnPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

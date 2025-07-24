@@ -4,5 +4,6 @@
     <string name="cd_flash">Linterna</string>
     <string name="cd_mask">Máscara</string>
     <string name="cd_capture">Capturar</string>
-
+    <string name="cd_back">Volver</string>
+    <string name="cd_docs">Documentos</string>
 </resources>

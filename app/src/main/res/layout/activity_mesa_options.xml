@@ -1,10 +1,379 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MesaOptionsActivity">
+    android:background="@color/colorBackground"
+    android:fillViewport="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header con información de la mesa -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorPrimary"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tvMesaTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorOnPrimary"
+                android:layout_marginBottom="8dp"
+                tools:text="Mesa 001"/>
+
+            <TextView
+                android:id="@+id/tvRecinto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorOnPrimary"
+                android:alpha="0.9"
+                android:layout_marginBottom="12dp"
+                tools:text="Recinto Electoral Central"/>
+
+            <!-- Mini estadísticas -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tvTotalVotos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorSecondary"
+                        tools:text="1,234"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Votos"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorOnPrimary"
+                        android:alpha="0.8"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:background="@color/colorOnPrimary"
+                    android:alpha="0.3"
+                    android:layout_marginHorizontal="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:id="@+id/llEstados"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvVerificado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="✓"
+                            android:textSize="16sp"
+                            android:textColor="@color/success"
+                            android:background="@color/white"
+                            android:paddingHorizontal="6dp"
+                            android:paddingVertical="2dp"
+                            android:layout_marginEnd="4dp"
+                            android:visibility="gone"
+                            tools:visibility="visible"/>
+
+                        <TextView
+                            android:id="@+id/tvObservado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⚠"
+                            android:textSize="16sp"
+                            android:textColor="@color/warning"
+                            android:background="@color/white"
+                            android:paddingHorizontal="6dp"
+                            android:paddingVertical="2dp"
+                            android:visibility="gone"
+                            tools:visibility="visible"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estado"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorOnPrimary"
+                        android:alpha="0.8"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Contenido principal con opciones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿Qué deseas hacer?"
+        android:textSize="20sp"
+        android:textStyle="bold"
+                android:textColor="@color/colorOnBackground"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- Opción 1: Ver Detalles -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <!-- Placeholder para imagen -->
+                    <LinearLayout
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@color/info"
+                        android:gravity="center"
+                        android:layout_marginEnd="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📊"
+                            android:textSize="32sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Contenido de texto -->
+                    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ver Detalles"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorOnSurface"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Consulta los resultados actuales de votación y estadísticas detalladas"
+                            android:textSize="14sp"
+                            android:textColor="@color/light_gray"
+                            android:lineSpacingExtra="2dp"/>
+
+                    </LinearLayout>
+
+                    <!-- Flecha -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▶"
+                        android:textSize="16sp"
+                        android:textColor="@color/light_gray"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Opción 2: Escanear -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardScan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <!-- Placeholder para imagen -->
+                    <LinearLayout
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@color/success"
+                        android:gravity="center"
+                        android:layout_marginEnd="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📸"
+                            android:textSize="32sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Contenido de texto -->
+                    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Escanear Acta"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorOnSurface"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Utiliza la cámara para escanear y procesar automáticamente el acta electoral"
+                            android:textSize="14sp"
+                            android:textColor="@color/light_gray"
+                            android:lineSpacingExtra="2dp"/>
+
+                    </LinearLayout>
+
+                    <!-- Flecha -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▶"
+                        android:textSize="16sp"
+                        android:textColor="@color/light_gray"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Opción 3: Rellenar Manual -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardManual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <!-- Placeholder para imagen -->
+                    <LinearLayout
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:background="@color/warning"
+                        android:gravity="center"
+                        android:layout_marginEnd="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="✏️"
+                            android:textSize="32sp"/>
+
+                    </LinearLayout>
+
+                    <!-- Contenido de texto -->
+                    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rellenar Manual"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorOnSurface"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ingresa manualmente los datos del acta electoral con formularios guiados"
+                            android:textSize="14sp"
+                            android:textColor="@color/light_gray"
+                            android:lineSpacingExtra="2dp"/>
+
+                    </LinearLayout>
+
+                    <!-- Flecha -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▶"
+                        android:textSize="16sp"
+                        android:textColor="@color/light_gray"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

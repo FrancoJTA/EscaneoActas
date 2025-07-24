@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- Estado enfocado -->
+    <item android:drawable="@drawable/bg_edittext_focused" 
+          android:state_focused="true"/>
+          
+    <!-- Estado seleccionado -->
+    <item android:drawable="@drawable/bg_edittext_focused" 
+          android:state_selected="true"/>
+          
+    <!-- Estado presionado -->
+    <item android:drawable="@drawable/bg_edittext_focused" 
+          android:state_pressed="true"/>
+    
+    <!-- Estado por defecto -->
+    <item android:drawable="@drawable/bg_edittext_idle"/>
+    
+</selector> 

@@ -1,180 +1,189 @@
 package com.example.escaneoactas
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.content.Intent
+import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.scale
 import com.example.escaneoactas.utils.Train.DigitClassifier
 import org.opencv.android.OpenCVLoader
+import org.opencv.android.Utils
 import org.opencv.core.*
+import org.opencv.core.Point
 import org.opencv.imgproc.Imgproc
 
 class SegmentacionActivity : AppCompatActivity() {
 
-    private lateinit var segmentedImageView: ImageView
+    private data class DigitRec(val x: Int, val y: Int, val label: Int)
+    private lateinit var mainImage: ImageView
+    private lateinit var roiContainer: LinearLayout
+    private lateinit var btnBack     : ImageButton
+    private lateinit var btnDocs     : ImageButton
+    /* nuevo rango de área ─ más permisivo */
+    private val minFrac = 0.001   // 0.3 % del frame
+    private val maxFrac = 0.50    // 50 %
+
+    /* padding negro extra (40 % del lado mayor) */
+    private val padRatio = 0.40f
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_segmentacion)
-        segmentedImageView = findViewById(R.id.segmentedImage)
+
+        mainImage    = findViewById(R.id.segmentedImage)
+        roiContainer = findViewById(R.id.roiContainer)
+        btnBack      = findViewById(R.id.btnBack)
+        btnDocs      = findViewById(R.id.btnDocs)
+
+        btnBack.setOnClickListener { finish() }   // vuelve a la cámara
+
+        val digits = mutableListOf<DigitRec>()
 
 
-        if (!OpenCVLoader.initDebug()) {
-            Log.e("OpenCV", "OpenCV no se pudo inicializar")
-            finish()
-            return
-        }
+        /* 1·  abre la máscara */
+        val uriStr = intent.getStringExtra("imageUri") ?: run { finish(); return }
+        val uri    = Uri.parse(uriStr)
+        val maskBmp = contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it) }
+            ?: run { finish(); return }
 
-        // Obtener imagen desde URI
-        val uriString = intent.getStringExtra("imageUri")
-        uriString?.let {
-            try {
-                val uri = Uri.parse(it)
-                contentResolver.openInputStream(uri)?.use { inputStream ->
-                    val bitmap = BitmapFactory.decodeStream(inputStream)
-                    val segmented = segmentarYReconocer(bitmap)
-                    segmentedImageView.setImageBitmap(segmented)
-                }
-            } catch (e: Exception) {
-                Log.e("Segmentacion", "Error al procesar imagen: ${e.message}")
-            }
-        } ?: run {
-            Log.e("Segmentacion", "URI de imagen no proporcionada")
-            finish()
-        }
-    }
+        /* 2·  RGBA -> gris -> binario */
+        val matRgba = Mat(); Utils.bitmapToMat(maskBmp, matRgba)
+        val matGray = Mat(); Imgproc.cvtColor(matRgba, matGray, Imgproc.COLOR_RGBA2GRAY)
+        val matBin  = Mat(); Imgproc.threshold(matGray, matBin, 128.0, 255.0, Imgproc.THRESH_BINARY)
 
-    private fun segmentarYReconocer(bitmap: Bitmap): Bitmap {
-        val mat = Mat()
-        val processed = Mat()
-
-        // Convertir a escala de grises
-        org.opencv.android.Utils.bitmapToMat(bitmap, mat)
-        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_RGBA2GRAY)
-
-        // Aplicar desenfoque gaussiano para reducir ruido
-        // Tamaño del kernel (5.0, 5.0) mejora suavizado pero puede afectar bordes pequeños
-        Imgproc.GaussianBlur(mat, mat, Size(47.0, 47.0), 0.0)
-
-        // Umbralización adaptativa mejora segmentación bajo distintas iluminaciones
-        Imgproc.adaptiveThreshold(
-            mat, processed, 255.0,
-            Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
-            Imgproc.THRESH_BINARY_INV,
-            29,  // tamaño de bloque: aumentar si hay mucho ruido
-            2.0  // constante que se resta: subir si hay muchos falsos positivos
-        )
-
-        // Morfología: cerrar huecos y mejorar forma de los números
-        val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(17.0, 17.0))
-        Imgproc.morphologyEx(processed, processed, Imgproc.MORPH_CLOSE, kernel)
-
+        /* 3·  contornos externos */
         val contours = mutableListOf<MatOfPoint>()
-        val hierarchy = Mat()
-        Imgproc.findContours(processed, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+        Imgproc.findContours(matBin, contours, Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
 
-        val result = Mat()
-        Imgproc.cvtColor(processed, result, Imgproc.COLOR_GRAY2RGBA)
+        val frameArea = matBin.total()
+        val minArea = (frameArea * minFrac).toInt()
+        val maxArea = (frameArea * maxFrac).toInt()
 
+        val result = matRgba.clone()
         val classifier = DigitClassifier(this)
-        val containerLayout = findViewById<LinearLayout>(R.id.roiContainer)
-        runOnUiThread { containerLayout.removeAllViews() }
+        roiContainer.removeAllViews()
 
-        for (cnt in contours) {
-            val rect = Imgproc.boundingRect(cnt)
+        for (c in contours) {
+            val rect = Imgproc.boundingRect(c)
+            val area = rect.area().toInt()
+            if (area !in minArea..maxArea) { c.release(); continue }
 
-            // Filtrado por tamaño: descarta ruido (ajusta según tamaño promedio del número)
-            if (rect.area() > 5000 && rect.width > 30 && rect.height > 30) {
-                val roi = Mat(processed, rect)
-                val rawBitmap = Bitmap.createBitmap(roi.cols(), roi.rows(), Bitmap.Config.ARGB_8888)
-                org.opencv.android.Utils.matToBitmap(roi, rawBitmap)
+            /* ---------- ROI con padding estilo MNIST ---------- */
+            val roi = Mat(matBin, rect)
 
-                // Fondo negro cuadrado con padding
-                val maxDim = maxOf(roi.cols(), roi.rows())
-                val paddingRatio = 0.7f // Mayor valor = más espacio negro alrededor
-                val paddedSize = (maxDim * (1.0f + paddingRatio)).toInt()
-                val paddedBitmap = Bitmap.createBitmap(paddedSize, paddedSize, Bitmap.Config.ARGB_8888)
-                val canvas = android.graphics.Canvas(paddedBitmap)
-                canvas.drawColor(android.graphics.Color.BLACK)
-                val left = (paddedSize - roi.cols()) / 2
-                val top = (paddedSize - roi.rows()) / 2
-                canvas.drawBitmap(rawBitmap, left.toFloat(), top.toFloat(), null)
+            // bitmap del ROI binario
+            val roiBmp = Bitmap.createBitmap(roi.cols(), roi.rows(), Bitmap.Config.ARGB_8888)
+            Utils.matToBitmap(roi, roiBmp)
 
-                // Dilatar para engrosar trazos
-                val thickenedMat = Mat()
-                val kernel1 = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(10.0, 10.0)) // Más grande = trazos más gruesos
-                org.opencv.android.Utils.bitmapToMat(paddedBitmap, thickenedMat)
-                Imgproc.dilate(thickenedMat, thickenedMat, kernel1)
-
-                // Convertir y escalar a 28x28 para clasificación
-                val thickenedBitmap = Bitmap.createBitmap(thickenedMat.cols(), thickenedMat.rows(), Bitmap.Config.ARGB_8888)
-                org.opencv.android.Utils.matToBitmap(thickenedMat, thickenedBitmap)
-                val resized = Bitmap.createScaledBitmap(thickenedBitmap, 28, 28, true)
-
-                // Solo vista previa para UI (no se usa en clasificación)
-                val previewBitmap = Bitmap.createBitmap(28, 28, Bitmap.Config.ARGB_8888)
-                for (y in 0 until 28) {
-                    for (x in 0 until 28) {
-                        val pixel = resized.getPixel(x, y)
-                        val r = (pixel shr 16) and 0xFF
-                        val g = (pixel shr 8) and 0xFF
-                        val b = (pixel and 0xFF)
-                        val avg = (r + g + b) / 3f
-                        val gray = avg.toInt().coerceIn(0, 255)
-                        val grayPixel = 0xFF shl 24 or (gray shl 16) or (gray shl 8) or gray
-                        previewBitmap.setPixel(x, y, grayPixel)
-                    }
-                }
-
-                val recognition = classifier.classify(resized)
-                Log.d("DigitClassifier", "Dígito: ${recognition.label}, Conf: ${"%.2f".format(recognition.confidence)}")
-
-                if (recognition.label != -1 && recognition.confidence > 0.5f) {
-                    runOnUiThread {
-                        val imageView = ImageView(this)
-                        imageView.setImageBitmap(previewBitmap)
-                        val params = LinearLayout.LayoutParams(100, 100)
-                        params.setMargins(10, 10, 10, 10)
-                        imageView.layoutParams = params
-                        containerLayout.addView(imageView)
-                    }
-
-                    Imgproc.rectangle(
-                        result,
-                        Point(rect.x.toDouble(), rect.y.toDouble()),
-                        Point((rect.x + rect.width).toDouble(), (rect.y + rect.height).toDouble()),
-                        Scalar(0.0, 255.0, 0.0, 255.0), 2
-                    )
-                    Imgproc.putText(
-                        result,
-                        recognition.label.toString(),
-                        Point(rect.x.toDouble(), rect.y - 5.0),
-                        Imgproc.FONT_HERSHEY_SIMPLEX,
-                        1.5,
-                        Scalar(255.0, 0.0, 0.0, 255.0),
-                        2
-                    )
-                }
-
-                thickenedMat.release()
+            // lado mayor + extra padding
+            val side = (maxOf(roiBmp.width, roiBmp.height) * (1 + padRatio)).toInt()
+            val square = Bitmap.createBitmap(side, side, Bitmap.Config.ARGB_8888)
+            Canvas(square).apply {
+                drawColor(Color.BLACK)
+                val dx = (side - roiBmp.width) / 2f
+                val dy = (side - roiBmp.height) / 2f
+                drawBitmap(roiBmp, dx, dy, null)
             }
+
+            val resized = square.scale(28, 28, false)
+
+            /* ---------- clasificación ---------- */
+            val res = classifier.classify(resized)
+            if (res.label != -1 && res.confidence > 0.5f) {
+                digits += DigitRec(rect.x, rect.y, res.label)
+                // miniatura en la tira horizontal
+                val thumb = resized.scale(56, 56, false)
+                val iv = ImageView(this).apply {
+                    setImageBitmap(thumb)
+                    layoutParams = LinearLayout.LayoutParams(72, 72).also { it.setMargins(8,8,8,8) }
+                }
+                roiContainer.addView(iv)
+
+                // dibuja caja + texto
+                Imgproc.rectangle(result, rect, Scalar(0.0,255.0,0.0,255.0), 2)
+                Imgproc.putText(result, res.label.toString(),
+                    Point(rect.x.toDouble(), rect.y - 6.0),
+                    Imgproc.FONT_HERSHEY_SIMPLEX, 1.2,
+                    Scalar(255.0,0.0,0.0,255.0), 2)
+            }
+            c.release()
+        }
+
+        val values = composeRowValues(digits)
+        val mesaId = intent.getIntExtra("mesa_id", -1)
+        
+        btnDocs.setOnClickListener {
+            val intent = Intent(this, DocsActivity::class.java)
+            intent.putExtra("mesa_id", mesaId)
+            intent.putExtra("suggested_values", values.toTypedArray())
+            startActivity(intent)
         }
 
         classifier.close()
-        mat.release()
-        processed.release()
-        hierarchy.release()
+        matGray.release(); matBin.release(); matRgba.release()
 
-        val resultBitmap = Bitmap.createBitmap(result.cols(), result.rows(), Bitmap.Config.ARGB_8888)
-        org.opencv.android.Utils.matToBitmap(result, resultBitmap)
-        result.release()
-        return resultBitmap
+        /* 4·  muestra resultado */
+        val outBmp = Bitmap.createBitmap(result.cols(), result.rows(), Bitmap.Config.ARGB_8888)
+        Utils.matToBitmap(result, outBmp); result.release()
+        mainImage.setImageBitmap(outBmp)
+
+
     }
+    private fun composeRowValues(list: List<DigitRec>): List<String> {
+        if (list.isEmpty()) return listOf("","","")
 
+        // 1· ordena por y (arriba-abajo)
+        val sorted = list.sortedBy { it.y }
 
+        // 2· agrupa: nuevo grupo si diferencia Y > umbral
+        val groups  = mutableListOf<MutableList<DigitRec>>()
+        val threshY = 50          // píxeles de tolerancia entre filas
+        var current = mutableListOf<DigitRec>()
+        var lastY   = sorted.first().y
+        for (d in sorted) {
+            if (kotlin.math.abs(d.y - lastY) > threshY && current.isNotEmpty()) {
+                groups += current
+                current = mutableListOf()
+            }
+            current += d
+            lastY = d.y
+        }
+        if (current.isNotEmpty()) groups += current
 
+        // Tomamos las 3 primeras filas
+        val rows = groups.take(3)
 
+        // 3· para cada fila: ordenar por X (izq-der) y concatenar (máximo 3 dígitos)
+        val values = rows.map { row ->
+            val sortedDigits = row.sortedBy { it.x }
+            val limitedDigits = sortedDigits.take(3)  // ← LIMITAR A MÁXIMO 3 DÍGITOS
+            val numberString = limitedDigits.joinToString("") { it.label.toString() }
+            
+            // Log para debug (opcional)
+            if (sortedDigits.size > 3) {
+                Log.d("SegmentacionActivity", 
+                    "Fila tenía ${sortedDigits.size} dígitos, usando solo los primeros 3: $numberString")
+            }
+            
+            // Validar que el número sea razonable (0-999)
+            val number = numberString.toIntOrNull()
+            if (number != null && number <= 999) {
+                numberString
+            } else {
+                Log.w("SegmentacionActivity", "Número inválido detectado: $numberString, ignorando")
+                ""  // Devolver string vacío si el número no es válido
+            }
+        }
+
+        // completa hasta 3 filas con cadenas vacías
+        while (values.size < 3) (values as MutableList).add("")
+        return values
+    }
 }
+
+

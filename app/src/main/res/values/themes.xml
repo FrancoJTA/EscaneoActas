@@ -16,7 +16,7 @@
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
         <item name="colorOnBackground">@color/colorOnBackground</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
-
+        <item name="textInputStyle">@style/Widget.Material3.TextInputLayout.OutlinedBox</item>
         <!-- Desactiva tema oscuro automático -->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>

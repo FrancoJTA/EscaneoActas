@@ -14,4 +14,15 @@
     <color name="colorOnSecondary">#002E62</color>      <!-- texto sobre amarillo -->
     <color name="colorOnBackground">#121212</color>     <!-- texto principal -->
     <color name="colorOnSurface">#262626</color>        <!-- texto en superficie -->
+    
+    <!-- Colores adicionales para estados -->
+    <color name="success">#28A745</color>               <!-- verde para verificado -->
+    <color name="warning">#FD7E14</color>               <!-- naranja para observado -->
+    <color name="danger">#DC3545</color>                <!-- rojo para errores -->
+    <color name="info">#17A2B8</color>                  <!-- azul claro para info -->
+    <color name="light_gray">#6C757D</color>            <!-- gris claro -->
+    <color name="border_gray">#DEE2E6</color>           <!-- gris para bordes -->
+    
+    <!-- Alias para compatibilidad -->
+    <color name="background">@color/colorBackground</color>
 </resources>
